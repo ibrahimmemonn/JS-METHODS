@@ -1,36 +1,43 @@
 import "./App.css";
 import { useState } from "react";
 import { useEffect } from "react";
+import Select from "react-select";
 import { Pagination, Checkbox, Col, Row, AutoComplete } from "antd";
 
 const Images = {
   1: [
     {
+      name: "Anaaj",
       type: "Anaaj",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GHAdHH5JRAecOr55AsY3Xj_EWzFeGDu5a08r3hInbPDImAfCb85a0-ApSrbzmz4OzBI&usqp=CAU",
     },
     {
+      name: "react",
       type: "react",
       image:
         "https://s3.ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2021/09/01031030/ReactJS.png",
     },
     {
+      name: "react",
       type: "react",
       image:
         "https://s3.ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2021/09/01031030/ReactJS.png",
     },
     {
+      name: "tree",
       type: "tree",
       image:
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
     },
     {
+      name: "react",
       type: "react",
       image:
         "https://s3.ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2021/09/01031030/ReactJS.png",
     },
     {
+      name: "react",
       type: "react",
       image:
         "https://s3.ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2021/09/01031030/ReactJS.png",
@@ -38,11 +45,13 @@ const Images = {
   ],
   2: [
     {
+      name: "react",
       type: "react",
       image:
         "https://s3.ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2021/09/01031030/ReactJS.png",
     },
     {
+      name: "tree",
       type: "tree",
       image:
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
@@ -53,16 +62,19 @@ const Images = {
         "https://s3.ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2021/09/01031030/ReactJS.png",
     },
     {
+      name: "tree",
       type: "tree",
       image:
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
     },
     {
+      name: "Anaaj",
       type: "Anaaj",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GHAdHH5JRAecOr55AsY3Xj_EWzFeGDu5a08r3hInbPDImAfCb85a0-ApSrbzmz4OzBI&usqp=CAU",
     },
     {
+      name: "Anaaj",
       type: "Anaaj",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GHAdHH5JRAecOr55AsY3Xj_EWzFeGDu5a08r3hInbPDImAfCb85a0-ApSrbzmz4OzBI&usqp=CAU",
@@ -70,31 +82,37 @@ const Images = {
   ],
   3: [
     {
+      name: "Anaaj",
       type: "Anaaj",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GHAdHH5JRAecOr55AsY3Xj_EWzFeGDu5a08r3hInbPDImAfCb85a0-ApSrbzmz4OzBI&usqp=CAU",
     },
     {
+      name: "tree",
       type: "tree",
       image:
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
     },
     {
+      name: "react",
       type: "react",
       image:
         "https://s3.ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2021/09/01031030/ReactJS.png",
     },
     {
+      name: "tree",
       type: "tree",
       image:
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
     },
     {
+      name: "Anaaj",
       type: "Anaaj",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GHAdHH5JRAecOr55AsY3Xj_EWzFeGDu5a08r3hInbPDImAfCb85a0-ApSrbzmz4OzBI&usqp=CAU",
     },
     {
+      name: "Anaaj",
       type: "Anaaj",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GHAdHH5JRAecOr55AsY3Xj_EWzFeGDu5a08r3hInbPDImAfCb85a0-ApSrbzmz4OzBI&usqp=CAU",
@@ -132,32 +150,13 @@ function useDebounce(value, time = 250) {
   return debounceVal;
 }
 
-const mockVal = (str, repeat = 1) => ({
-  value: str.repeat(repeat),
-});
-
 function App() {
-  const [query, setQuery] = useState(2);
+  const [query, setQuery] = useState("");
   const [suggester, setSuggester] = useState([]);
   const [filterImg, setFilterImg] = useState("");
   const debounceVal = useDebounce(query);
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState([]);
   const [key, setKey] = useState(1);
 
-  const onSearch = (searchText) => {
-    setOptions(
-      !searchText
-        ? []
-        : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)]
-    );
-  };
-  const onSelect = (data) => {
-    console.log("onSelect", data);
-  };
-  const onChange1 = (data) => {
-    setValue(data);
-  };
   useEffect(() => {
     let ignore = false;
     (async () => {
@@ -175,6 +174,40 @@ function App() {
     };
   }, [debounceVal]);
 
+  const selectOptions = (option) => {
+    let label = option.value.split(" ").join("-").toLowerCase();
+    // router.push(`/glossary/${label}`);
+  };
+  let glossary = {
+    Tree: {
+      slug: "Tree",
+      title: "tree",
+    },
+    React: {
+      slug: "React",
+      title: "react",
+    },
+    Anaaj: {
+      slug: "Anaaj",
+      title: "anaaj",
+    },
+  };
+
+  let arr1 = [];
+  Object.entries(glossary).map(([key, val]) => {
+    let obj = {};
+    obj["value"] = val.slug;
+    obj["label"] = val.title;
+    arr1.push(obj);
+  });
+  let searchable = (
+    <Select
+      options={arr1}
+      placeholder="Search topics"
+      onChange={selectOptions}
+    />
+  );
+
   let arr = [1, 2, 3];
   const filter = (type) => {
     let newArr = [];
@@ -188,13 +221,23 @@ function App() {
     });
     setFilterImg(newArr);
   };
+
   const onChange = (checkedValues) => {
     filter(checkedValues);
     console.log("aa", checkedValues);
   };
   return (
     <div className="App">
-      <input value={query} onChange={(e) => setQuery(e?.target?.value)} />
+      {/* <input value={query} onChange={(e) => setQuery(e?.target?.value)} /> */}
+      <div
+        style={{
+          justifyContent: "center",
+          display: "flex",
+          alignItems: "flex-end",
+        }}
+      >
+        {searchable}
+      </div>
       <div>
         {suggester.map((suggesters) => (
           <div key={suggesters}>{suggesters}</div>
@@ -231,7 +274,11 @@ function App() {
           >
             {filterImg.map((img) => {
               return (
-                <img height={100} src={img?.image} style={{ margin: 50 }} />
+                <img
+                  height={100}
+                  src={img?.image}
+                  style={{ margin: 50, width: 180 }}
+                />
               );
             })}
           </div>
@@ -253,7 +300,14 @@ function App() {
             }}
           >
             {Images[key].map((item) => (
-              <img height={100} src={item?.image} style={{ margin: 50 }} />
+              <div>
+                <img
+                  height={100}
+                  src={item?.image}
+                  style={{ margin: 50, marginBottom: 0, width: 180 }}
+                />
+                <h1>{item?.name}</h1>
+              </div>
             ))}
           </div>
           <Pagination
